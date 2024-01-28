@@ -3752,7 +3752,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4658375276976938459}
   m_Layer: 0
-  m_Name: Sala 4
+  m_Name: Sala 4 Old
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
