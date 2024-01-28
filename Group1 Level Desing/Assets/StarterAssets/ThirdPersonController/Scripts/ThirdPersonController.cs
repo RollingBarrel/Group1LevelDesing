@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Security.Cryptography;
+using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 #endif
@@ -75,6 +76,7 @@ namespace StarterAssets
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
 
+        [Header("Dash")]
         [Tooltip("The Dash Horizontal Speed")]
         public float DashSpeed = 100.5f;
 
@@ -84,6 +86,8 @@ namespace StarterAssets
         [Tooltip("Time required to pass before entering the dash state.")]
         public float DashFinishTimeout = 0.15f;
 
+        [Header("Spawn")]
+        public GameObject spawnpoint;
 
         // cinemachine
         private float _cinemachineTargetYaw;
@@ -175,7 +179,7 @@ namespace StarterAssets
             GroundedCheck();
             Move();
             Dash();
-            
+            FallRespawn();
 
         }
 
@@ -294,6 +298,16 @@ namespace StarterAssets
             {
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
+            }
+        }
+
+        private void FallRespawn()
+        {
+            if (transform.position.y < -10) // where -10 is the lowest the player can fall before reset
+            {
+                _verticalVelocity = 0f;
+                Grounded = true;
+                transform.position = spawnpoint.transform.position;
             }
         }
 
