@@ -78,7 +78,7 @@ namespace StarterAssets
 
         [Header("Dash")]
         [Tooltip("The Dash Horizontal Speed")]
-        public float DashSpeed = 100.5f;
+        public float DashSpeed = 30.0f;
 
         [Tooltip("Time required to pass before being able to dash again. Set to 0f to instantly dash again")]
         public float DashTimeout = 0.50f;
@@ -341,7 +341,7 @@ namespace StarterAssets
                     Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
                     // move the player
-                    _controller.Move(targetDirection.normalized * (DashSpeed * 5 * Time.deltaTime) +
+                    _controller.Move(targetDirection.normalized * (DashSpeed * 1 * Time.deltaTime) +
                                      new Vector3(_dashVelocity, 0.0f, 0.0f) * Time.deltaTime);
 
                     // update animator if using character
