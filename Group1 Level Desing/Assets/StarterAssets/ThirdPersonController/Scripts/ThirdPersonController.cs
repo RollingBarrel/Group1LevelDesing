@@ -75,6 +75,16 @@ namespace StarterAssets
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
 
+        [Tooltip("The Dash Horizontal Speed")]
+        public float DashSpeed = 100.5f;
+
+        [Tooltip("Time required to pass before being able to dash again. Set to 0f to instantly dash again")]
+        public float DashTimeout = 0.50f;
+
+        [Tooltip("Time required to pass before entering the dash state.")]
+        public float DashFinishTimeout = 0.15f;
+
+
         // cinemachine
         private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
@@ -85,11 +95,14 @@ namespace StarterAssets
         private float _targetRotation = 0.0f;
         private float _rotationVelocity;
         private float _verticalVelocity;
+        private float _dashVelocity;
         private float _terminalVelocity = 53.0f;
 
         // timeout deltatime
         private float _jumpTimeoutDelta;
         private float _fallTimeoutDelta;
+        private float _dashTimeoutDelta;
+        private float _dashFinishTimeoutDelta;
 
         // animation IDs
         private int _animIDSpeed;
@@ -97,6 +110,8 @@ namespace StarterAssets
         private int _animIDJump;
         private int _animIDFreeFall;
         private int _animIDMotionSpeed;
+
+        private bool _isDashing = false;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
         private PlayerInput _playerInput;
@@ -159,6 +174,9 @@ namespace StarterAssets
             JumpAndGravity();
             GroundedCheck();
             Move();
+            Dash();
+            
+
         }
 
         private void LateUpdate()
@@ -279,8 +297,80 @@ namespace StarterAssets
             }
         }
 
+        private void Dash()
+        {
+            Debug.Log("Dash called");
+            if (!_isDashing)
+            {
+                // reset the fall timeout timer
+                _dashFinishTimeoutDelta = DashFinishTimeout;
+
+                // update animator if using character
+                /*if (_hasAnimator)
+                {
+                    _animator.SetBool(_animIDJump, false);
+                    _animator.SetBool(_animIDFreeFall, false);
+                }*/
+
+                // stop our velocity dropping infinitely when grounded
+                if (_dashVelocity < 0.0f)
+                {
+                    _dashVelocity = -2f;
+                }
+
+                // Dash
+                if (_input.dash && _dashTimeoutDelta <= 0.0f)
+                {
+                    _isDashing = true;
+                    _dashVelocity = Mathf.Sqrt(DashSpeed);
+
+                    Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+
+                    // move the player
+                    _controller.Move(targetDirection.normalized * (DashSpeed * 5 * Time.deltaTime) +
+                                     new Vector3(_dashVelocity, 0.0f, 0.0f) * Time.deltaTime);
+
+                    // update animator if using character
+                    /*if (_hasAnimator)
+                    {
+                        _animator.SetBool(_animIDJump, true);
+                    }*/
+                }
+
+                // jump timeout
+                if (_dashTimeoutDelta >= 0.0f)
+                {
+                    _dashTimeoutDelta -= Time.deltaTime;
+                }
+            }
+            else
+            {
+                // reset the jump timeout timer
+                _dashTimeoutDelta = DashTimeout;
+
+                // fall timeout
+                if (_dashFinishTimeoutDelta >= 0.0f)
+                {
+                    _dashFinishTimeoutDelta -= Time.deltaTime;
+                }
+                else
+                {
+                    // update animator if using character
+                    /*if (_hasAnimator)
+                    {
+                        _animator.SetBool(_animIDFreeFall, true);
+                    }*/
+                }
+
+                // if we are not grounded, do not dash
+                _input.dash = false;
+                _isDashing = false;
+            }
+        }
+
         private void JumpAndGravity()
         {
+            Debug.Log("JumpAndGravity called");
             if (Grounded)
             {
                 // reset the fall timeout timer
