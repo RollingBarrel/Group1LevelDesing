@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8770810294602951339}
   m_Layer: 0
-  m_Name: Sala 5_old
+  m_Name: Sala 5_BlockOut
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
