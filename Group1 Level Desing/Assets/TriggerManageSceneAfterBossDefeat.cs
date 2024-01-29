@@ -23,7 +23,6 @@ public class TriggerManageSceneAfterBossDefeat : MonoBehaviour
     {
         if (collider.tag == "Player")
         {
-            Debug.Log("Entering collider!");
             blockAccesToRoom2.enabled = true;
             blockAccesToRoom5.enabled = true;
         }
