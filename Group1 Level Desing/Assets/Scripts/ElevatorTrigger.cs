@@ -6,8 +6,8 @@ using UnityEngine.SceneManagement;
 public class ElevatorTrigger : MonoBehaviour
 {
     public GameObject endLevelText;
-    //private float textTimer = 5.0f;
-    //private bool muestraTexto = false;
+    private float textTimer = 3.0f;
+    private bool showTxt = false;
 
     // Start is called before the first frame update
     void Start()
@@ -17,42 +17,38 @@ public class ElevatorTrigger : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //MostrarTexto();
+        if (showTxt == true)
+        {
+            ShowText();
+        }    
     }
 
     private void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == "Player")
         {
-            endLevelText.SetActive(true);
-            SceneManager.LoadScene("Mapa entero");
-            //muestraTexto = true;
+            showTxt = true;
         }
     }
 
-    /*
-    void MostrarTexto()
+    void ShowText()
     {
-        if(muestraTexto = true)
-        {
-            // Iniciar la rutina para hacer desaparecer el texto después de un tiempo
+            endLevelText.SetActive(true);
+            // Init the turine for make disapear the text after a time
             StartCoroutine(EsperarYDesaparecer());
-        }
     }
 
     IEnumerator EsperarYDesaparecer()
     {
-        // Esperar el tiempo especificado
+        // Wait the specified time
         yield return new WaitForSeconds(textTimer);
 
-        // Hacer desaparecer el texto
-        OcultarTexto();
+        HideText();
     }
 
-    void OcultarTexto()
+    void HideText()
     {
         endLevelText.SetActive(false);
-        SceneManager.LoadScene("Test");
+        SceneManager.LoadScene("Mapa entero");
     }
-    */
 }
