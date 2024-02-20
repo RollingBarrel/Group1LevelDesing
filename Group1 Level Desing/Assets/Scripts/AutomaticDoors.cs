@@ -13,8 +13,6 @@ public class AutomaticDoors : MonoBehaviour
 
     public AudioSource doorSound;
     public AudioSource doorClosedSound;
-    //private Shooter shooter;
-    //private ThirdPersonController thirdPersonController;
 
     public float speed = 1.0f;
 
@@ -26,8 +24,6 @@ public class AutomaticDoors : MonoBehaviour
 
     private void Awake()
     {
-        //shooter = GameObject.Find("FPSController").GetComponent<Shooter>();
-        //thirdPersonController = GameObject.Find("PlayerArmature").GetComponent<ThirdPersonController>();
     }
 
     void Update()
@@ -76,7 +72,6 @@ public class AutomaticDoors : MonoBehaviour
         }
         else
         {
-            //shooter.Message("YOU MUST KILL ALL THE ENEMIES TO UNLOCK THE EXIT ELEVATOR DOOR");
             doorClosedSound.Play();
         }
     }

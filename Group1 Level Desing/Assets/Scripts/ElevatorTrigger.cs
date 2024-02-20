@@ -35,10 +35,10 @@ public class ElevatorTrigger : MonoBehaviour
     {
             endLevelText.SetActive(true);
             // Init the turine for make disapear the text after a time
-            StartCoroutine(EsperarYDesaparecer());
+            StartCoroutine(WaitAndDissapear());
     }
 
-    IEnumerator EsperarYDesaparecer()
+    IEnumerator WaitAndDissapear()
     {
         // Wait the specified time
         yield return new WaitForSeconds(textTimer);
